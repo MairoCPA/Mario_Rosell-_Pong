@@ -6,16 +6,28 @@ public class BallController : MonoBehaviour
 {
     public float velocity = 10f;
     public Game_Manager gameManager;
+    public float TimeAlive = 0f;
+    public float VelocityMulty = 1f;
 
+    AudioSource _audioSource;
     Rigidbody2D _rb;
     float _lastHorizontalDirection = 1f;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
-        LaunchBall(0);
+        _audioSource = GetComponent<AudioSource>();
+        LaunchBall (0);
     }
-
+    private void Update()
+    {
+        TimeAlive += Time.deltaTime;
+        if (TimeAlive > 2f)
+        {
+            TimeAlive = 0f;
+            VelocityMulty += 0.25f;
+        }
+    }
     void FixedUpdate()
     {
         if (_rb.velocity.magnitude > velocity)
@@ -60,10 +72,7 @@ public class BallController : MonoBehaviour
         }
         float yVelocity = Random.Range(-0.7f, 0.7f);
 
-        _rb.velocity = new Vector2(
-            _lastHorizontalDirection,
-            yVelocity
-        ).normalized * velocity;
+        _rb.velocity = new Vector2(_lastHorizontalDirection,yVelocity).normalized * velocity;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -79,7 +88,9 @@ public class BallController : MonoBehaviour
             LaunchBall(1);
         }
         Debug.Log("Ball Hit");
-    }
+        _audioSource.pitch = Random.Range(0.8f, 1.2f);
+        _audioSource.Play();
+    }     
             
         
-    }
+ }
