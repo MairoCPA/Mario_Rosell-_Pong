@@ -5,9 +5,11 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float Velocidad = 50f;//Velocidad bola
-    public float topheight = 3;//Altura limite
-    public float botheight = -3;
+    public float topheight = 5;//Altura limite
+    public float botheight = -5;
     public bool UseArrowKeys = false;
+    public bool IA;
+    public GameObject ball;
 
 
     // Start is called before the first frame update
@@ -19,7 +21,18 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MovePaddle();
+        if (IA == false)
+        {
+            MovePaddle();
+        }
+        else 
+        {
+            MovePaddleIA();
+        }
+    }
+    void MovePaddleIA()
+    {
+
     }
     void MovePaddle()
     {

@@ -11,19 +11,20 @@ public class SceneController : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
+    public void Mainmenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+    //private void Update()
+    //{
+    //    if (Manager.p1 > 4 || Manager.p2 > 4) ;
+    //    { 
+    //        SceneManager.LoadScene(0); 
+    //    }
+
+    //}
     public void ExitGame()
     {
         Application.Quit();
-    }
-    private void Update()
-    {
-        if (Manager.p1 >= 5)
-        { 
-            SceneManager.LoadScene(1); 
-        }
-        if (Manager.p2 >= 5)
-        {
-            SceneManager.LoadScene(1);
-        }
     }
 }

@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour
 {
-    public float velocity = 10f;
-    public Game_Manager gameManager;
+    public float BallVelocity = 10f;
     public float TimeAlive = 0f;
-    public float VelocityMulty = 1f;
+    public float VelocityMulty = 1;
+    public Game_Manager gameManager;
 
     AudioSource _audioSource;
     Rigidbody2D _rb;
@@ -17,25 +17,29 @@ public class BallController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _audioSource = GetComponent<AudioSource>();
-        LaunchBall (0);
+        LaunchBall(0);
     }
     private void Update()
     {
-        TimeAlive += Time.deltaTime;
-        if (TimeAlive > 2f)
+        if (TimeAlive > 2f && VelocityMulty < 2)
         {
-            TimeAlive = 0f;
             VelocityMulty += 0.25f;
+            BallVelocity *= VelocityMulty;
+            TimeAlive = 0f;
+        }
+        else
+        {
+            TimeAlive += Time.deltaTime;
         }
     }
     void FixedUpdate()
     {
-        if (_rb.velocity.magnitude > velocity)
+        if (_rb.velocity.magnitude > BallVelocity)
         {
-            _rb.velocity = _rb.velocity.normalized * velocity;
+            _rb.velocity = _rb.velocity.normalized * BallVelocity;
         }
 
-        if (Mathf.Abs(_rb.velocity.x) >= velocity * 0.3f)
+        if (Mathf.Abs(_rb.velocity.x) >= BallVelocity * 0.3f)
         {
             _lastHorizontalDirection = Mathf.Sign(_rb.velocity.x);
         }
@@ -54,13 +58,16 @@ public class BallController : MonoBehaviour
             _rb.velocity = new Vector2(
                 _lastHorizontalDirection * minX,
                 yDirection * y
-            ) * velocity;
+            ) * BallVelocity;
         }
         gameManager.UpdatePointsText();
     }
 
     void LaunchBall(int dir)
     {
+        BallVelocity = 10;
+        VelocityMulty = 1f;
+        TimeAlive = 0f;
         this.transform.position = new Vector3(0, 0, 0);
         if (dir == 0)
         {
@@ -72,7 +79,7 @@ public class BallController : MonoBehaviour
         }
         float yVelocity = Random.Range(-0.7f, 0.7f);
 
-        _rb.velocity = new Vector2(_lastHorizontalDirection,yVelocity).normalized * velocity;
+        _rb.velocity = new Vector2(_lastHorizontalDirection, yVelocity).normalized * BallVelocity;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -90,7 +97,7 @@ public class BallController : MonoBehaviour
         Debug.Log("Ball Hit");
         _audioSource.pitch = Random.Range(0.8f, 1.2f);
         _audioSource.Play();
-    }     
-            
-        
- }
+    }
+
+
+}
